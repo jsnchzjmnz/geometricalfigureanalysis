@@ -116,3 +116,23 @@ triangulo(A,B,C):- distancia(A,B,R1),distancia(B,C,R2),distancia(A,C,R3),R1=:=R2
 hexagono(A,B,C,D,E,F):-distancia(A,F,R1),distancia(B,E,R2),distancia(C,D,R3),distancia(A,B,R4),distancia(E,F,R5),distancia(A,C,R6),distancia(C,E,R7),distancia(B,D,R8),distancia(D,F,R9),R1=:=R2,R2=:=R3,R4=:=R5,R5=:=R6,R6=:=R7,R7=:=R8,R8=:=R9.
 
 paralelogramo(A,B,C,D):- distancia(A,B,R1), distancia(C,D,R2), distancia(A,C,R3), distancia(B,D,R4),R1=:=R2,R2=:=R3,R3=:=R4.
+
+largo_lista([],0).
+largo_lista([_|Resto],R):- largo_lista(Resto,R2), R is 1+R2 .
+
+posibleTriangulo(Lista):- largo_lista(Lista,R), R=:=3.
+posibleParalelogramo(Lista):- largo_lista(Lista,R), R=:=4.
+posibleHexagono(Lista):- largo_lista(Lista,R), R=:=6.
+
+primerElemento([X|Resto],X,Resto).
+lista_a_elementos3(Lista,X,Y,Z):- primerElemento(Lista,X,L1),primerElemento(L1,Y,L2),primerElemento(L2,Z,_).
+lista_a_elementos4(Lista,W,X,Y,Z):- primerElemento(Lista,W,L1),primerElemento(L1,X,L2),primerElemento(L2,Y,L3),primerElemento(L3,Z,_).
+lista_a_elementos6(Lista,U,V,W,X,Y,Z):- primerElemento(Lista,U,L1),primerElemento(L1,V,L2),primerElemento(L2,W,L3),primerElemento(L3,X,L4),primerElemento(L4,Y,L5),primerElemento(L5,Z,_).
+
+evaluarFigura(Lista):-posibleTriangulo(Lista),msort(Lista,L),lista_a_elementos3(L,X,Y,Z),triangulo(X,Y,Z),write('Es un triangulo').
+evaluarFigura(Lista):-posibleParalelogramo(Lista),msort(Lista,L),lista_a_elementos4(L,W,X,Y,Z),paralelogramo(W,X,Y,Z),write('Es un paralelogramo').
+evaluarFigura(Lista):-posibleHexagono(Lista),msort(Lista,L),lista_a_elementos6(L,U,V,W,X,Y,Z),hexagono(U,V,W,X,Y,Z),write('Es un hexagono').
+
+evaluar(Lista):-not(evaluarFigura(Lista)),write('Figura No Valida').
+
+procesar(Lista):-not(evaluar(Lista)).
